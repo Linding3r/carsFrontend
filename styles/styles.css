@@ -19,3 +19,16 @@ Styles used for labels and input fields in boot strap columns
   border: 1px solid lightgray;
 }
 
+
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/cars-client-suggestion/images/loading.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1000;
+  display: none;
+}

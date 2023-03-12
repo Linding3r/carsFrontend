@@ -5,6 +5,7 @@ import "./navigo_EditedByLars.js"  //Will create the global Navigo, with a few c
 import {
   setActiveLink, adjustForMissingHash, renderTemplate, loadHtml
 } from "./utils.js"
+import { customAlert, CustomAlert } from "./alert.js"
 
 import { initReservation } from "./pages/reservation/reserve.js"
 import { initMembers } from "./pages/members/members.js"

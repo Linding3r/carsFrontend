@@ -24,7 +24,7 @@ export function initSignup() {
 
 
 function signup(evt) {
-    const errorTxt = document.getElementById("error-msg");
+    const errorTxt = document.getElementById("c-error");
     const member = {
         username: encode(document.getElementById("input-username").value),
         email: encode(document.getElementById("input-email").value),
@@ -35,38 +35,31 @@ function signup(evt) {
         city: encode(document.getElementById("input-city").value),
         zip: encode(document.getElementById("input-zip").value)
     };
-    try {
-        const res = await fetch(URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(member),
+    try{
+        fetch(URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(member),
+    })
+        .then((res) => res.json())
+        .then((member) => {
+            alert("You have signed up successfully!");
+            clearInput()})
+        .catch((error) => {
+            document.getElementById("c-error").innerText = error;
         });
-        if (!res.ok) {
-            const errorData = await res.json();
-            if(errorData.message === "Member with this ID already exist") {
-            throw new Error("API Error - " + res.status + " - " + errorData.message);
-            } 
-            else if(errorData.message === "Member with this Email already exist") {
-            throw new Error("API Error - " + res.status + " - " + errorData.message);
-            } 
-            else {
-            throw new Error("Failed to create member");
-            }
-        }
-        clearInput();
-    } catch (err) {
-        console.error("Error:", err.message);
-        if (err.message.includes("Member with this ID already exist")) {
-        errorTxt.innerText = "Username already taken";
-        document.getElementById("input-username").value = "";   
-        }
-        if (err.message.includes("Member with this Email already exist")) {
-        errorTxt.innerText = "Email already in use";
-        document.getElementById("input-email").value = "";
-        }
+}catch (err) {
+    if (err.message.includes("Member with this ID already exist")) {
+    errorTxt.innerText = "Username already taken";
+    document.getElementById("input-username").value = "";   
     }
+    if (err.message.includes("Member with this Email already exist")) {
+    errorTxt.innerText = "Email already in use";
+    document.getElementById("input-email").value = "";
+    }
+}
 }
 
 

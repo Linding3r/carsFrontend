@@ -99,3 +99,12 @@ export function encode(str) {
   str = str.replace(/'/g, "&#039;");
   return str;
 }
+
+
+export function showLoading() {
+  document.getElementById('loading').style.display = 'block';
+}
+
+export function hideLoading() {
+  document.getElementById('loading').style.display = 'none';
+}
