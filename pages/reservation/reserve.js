@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import { API_URL } from "../../settings.js"
 import { hideLoading, sanitizeStringWithTableRows, showLoading, handleHttpErrors } from "../../utils.js";
@@ -83,10 +84,10 @@ export async function initReservation() {
   export async function reserveCar() {
     const carId = document.getElementById("car-id").value;
     const reservationDate = document.getElementById("reservation-date").value;
-    const memberId = document.getElementById("user-name").value;
+    const username = document.getElementById("user-name").value;
   
     const reservation = {
-      memberId: memberId,
+      username: username,
       carId: carId,
       rentalDate: reservationDate,
     };
