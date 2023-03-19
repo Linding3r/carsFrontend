@@ -5,13 +5,12 @@ import "./navigo_EditedByLars.js"  //Will create the global Navigo, with a few c
 import {
   setActiveLink, adjustForMissingHash, renderTemplate, loadHtml
 } from "./utils.js"
-import { customAlert, CustomAlert } from "./alert.js"
 
 import { initReservation } from "./pages/reservation/reserve.js"
 import { initMembers } from "./pages/members/members.js"
 import { initCars } from "./pages/cars/cars.js"
 import { initAddCar } from "./pages/addCar/addCar.js"
-import { initLogin } from "./pages/login/login.js"
+import { initLogin , logout } from "./pages/login/login.js"
 import { initSignup } from "./pages/signup/signup.js"
 import { initFindEditCar } from "./pages/findEditCar/findEditCar.js"
 import { initListReservationsAll } from "./pages/showReservations/reservations.js"
@@ -58,15 +57,15 @@ window.addEventListener("load", async () => {
         renderTemplate(templateAddCar, "content")
         initAddCar()
       },
-      "/members": () => {
-        renderTemplate(templateMembers, "content")
-        initMembers()
+      "/members":() => {
+          renderTemplate(templateMembers, "content")
+          initMembers()
       },
       "/reserve-car": () => {
         renderTemplate(templateReserve, "content")
         initReservation()
       },
-      "/reservations": () => {
+      "/reservations":() => {
         renderTemplate(templateReservations, "content")
         initListReservationsAll()
       },
@@ -74,10 +73,13 @@ window.addEventListener("load", async () => {
         renderTemplate(templateSignup, "content")
         initSignup()
       },
-      "/login": (match) => {
+      "/login": () => {
         renderTemplate(templateLogin, "content")
         initLogin()
-      }
+      },  
+      "/logout": () => {
+        logout()
+      },
     })
     .notFound(() => {
       renderTemplate(templateNotFound, "content")
@@ -90,3 +92,33 @@ window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
   alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
     + ' Column: ' + column + ' StackTrace: ' + errorObj);
 }
+
+
+const userRole = localStorage.getItem("roles");
+
+const adminNavItems = document.querySelectorAll("#admin-nav");
+const userNavItems = document.querySelectorAll(".nav-item:not(#login-id):not(#logout-id)");
+
+if(userRole){
+if (userRole.includes("ADMIN")) {
+  adminNavItems.forEach(item => item.style.display = "block");
+} else if (userRole.includes("USER")) {
+  userNavItems.forEach(item => item.style.display = "block");
+  document.getElementById("signup").style.display = "none";
+  adminNavItems.forEach(item => item.style.display = "none");
+} else {
+  adminNavItems.forEach(item => item.style.display = "none");
+  userNavItems.forEach(item => item.style.display = "none");
+  document.getElementById("signup").style.display = "block";
+}
+}
+
+if (userRole) {
+  document.getElementById("login-id").style.display = "none";
+  document.getElementById("logout-id").style.display = "block";
+} else {
+  document.querySelectorAll("#admin-nav").forEach(item => item.style.display = "none");
+	document.querySelectorAll(".nav-item:not(#login-id):not(#logout-id)").forEach(item => item.style.display = "none");
+  document.getElementById("signup").style.display = "block";
+}
+

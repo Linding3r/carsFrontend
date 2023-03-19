@@ -29,7 +29,7 @@
             <a class="nav-link" href="/" data-navigo>Home</a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            <a id="admin-nav" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               Cars
             </a>
@@ -43,10 +43,10 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/members" data-navigo>Members</a>
+            <a id="admin-nav" class="nav-link" href="/members" data-navigo>Members</a>
           </li>
 
-          <li class="nav-item">
+          <li id="signup" class="nav-item">
             <a class="nav-link" href="/signup" data-navigo>Sign up</a>
           </li>
 
@@ -61,8 +61,11 @@
             </ul>
           </li>
 
-          <li class="nav-item">
+          <li id="login-id" class="nav-item">
             <a class="nav-link" href="/login" data-navigo>Login</a>
+          </li>
+          <li id="logout-id" class="nav-item" style="display: none">
+            <a class="nav-link" href="/logout" data-navigo>Logout</a>
           </li>
         </ul>
       </div>

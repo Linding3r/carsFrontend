@@ -5,18 +5,32 @@ import { hideLoading, sanitizeStringWithTableRows, showLoading, handleHttpErrors
 const URL = API_URL + "/cars"
 const RES_URL = API_URL + "/reservations"
 
+const token = localStorage.getItem("token");
+const roles = localStorage.getItem("roles");
+
 export async function initReservation() {
+  if (!token || !roles.includes("USER")) {
+    window.router.navigate("/login")
+    alert("Login to view this page")
+  } else{
     getCars();
     document.getElementById("table-rows").onclick = setupReservationModal;
     document
       .getElementById("btn-reservation")
       .addEventListener("click", reserveCar);
+    }
   }
   
   export async function getCars() {
     showLoading();
+    const options = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    };
     try {
-      const cars = await fetch(URL).then((res) => res.json());
+      const cars = await fetch(URL, options).then((res) => res.json());
       const tableRowsStr = cars
         .map(
           (car) => `
@@ -52,8 +66,14 @@ export async function initReservation() {
   }
   
   async function getCarDetails(carId) {
+    const options = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    };
     try {
-      const response = await fetch(`${URL}/${carId}`);
+      const response = await fetch(`${URL}/${carId}`, options);
       const carDetails = await response.json();
       return carDetails;
     } catch (error) {
@@ -84,7 +104,7 @@ export async function initReservation() {
   export async function reserveCar() {
     const carId = document.getElementById("car-id").value;
     const reservationDate = document.getElementById("reservation-date").value;
-    const username = document.getElementById("user-name").value;
+    const username = localStorage.getItem("user");
   
     const reservation = {
       username: username,
@@ -93,17 +113,24 @@ export async function initReservation() {
     };
   
     console.log(JSON.stringify(reservation));
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(reservation),
+    };
+
     try {
-      await fetch(RES_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reservation),
-      });
+      await fetch(RES_URL, options).then(handleHttpErrors);
       alert("Reservation added successfully");
     } catch (error) {
       console.error(error);
+      if(error.message === "given date and car is already reserved"){
+        alert("The given car is already reserved for the given date.");
+      } else {
       alert("An error occurred while reserving car.");
+    }
     }
   }

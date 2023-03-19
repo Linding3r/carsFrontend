@@ -1,14 +1,18 @@
 // @ts-nocheck
 
-import { customAlert } from "../../alert.js";
 import { API_URL,FETCH_NO_API_ERROR } from "../../settings.js"
 import { encode} from "../../utils.js";
 const URL = API_URL + "/cars"
 
+const token = localStorage.getItem("token");
+const roles = localStorage.getItem("roles");
 
 export async function initAddCar(match) {
   clearInput();
   clearMsg();
+  if (!token || !roles.includes("ADMIN")) {
+    window.router.navigate("/login")
+  }
   document.getElementById("btn-submit-car").onclick = addCar;
   const inputs = document.querySelectorAll('#form input[required]');
   const submitButton = document.querySelector('#btn-submit-car');
@@ -33,6 +37,7 @@ const car = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(car),
   })

@@ -2,12 +2,24 @@ import { API_URL } from "../../settings.js"
 import { hideLoading, sanitizeStringWithTableRows, showLoading } from "../../utils.js";
 const URL = API_URL + "/cars"
 
+const token = localStorage.getItem("token");
+const roles = localStorage.getItem("roles");
+
+
 export async function initCars() {
     clearTable();
     showLoading();
+    if (!token || !roles.includes("ADMIN")) {
+      window.router.navigate("/login")
+    }
+    const options = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    };
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      const cars = await fetch(URL).then((res) => res.json());
+      const cars = await fetch(URL, options).then((res) => res.json());
       showCars(cars);
     } catch (err) {
       hideLoading();

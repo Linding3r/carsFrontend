@@ -2,7 +2,11 @@
 import { API_URL} from "../../settings.js"
 import { hideLoading, sanitizeStringWithTableRows, showLoading } from "../../utils.js";
 
-const URL = `${API_URL}/cars`
+const URL = API_URL + "/cars"
+
+const token = localStorage.getItem("token");
+const roles = localStorage.getItem("roles");
+
 
 export function initFindEditCar(){
     clearInput();
@@ -15,12 +19,21 @@ export function initFindEditCar(){
 function findCarToEdit(evt){
     const id = document.getElementById("car-id-input").value
     showLoading();
+    if (!token || !roles.includes("ADMIN")) {
+      window.router.navigate("/login")
+    }
+    const options = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    };
     if(!id){
      alert("Enter a Car id")
      hideLoading();
      return 
     }
-    fetch(URL+"/"+id)
+    fetch(URL+"/"+id, options)
     .then(res => {
      if(!res.ok){
          return Promise.reject("Car Not Found") 
@@ -51,13 +64,16 @@ function editCar(evt){
         pricePrDay: document.getElementById("price-pr-day").value,
         bestDiscount: document.getElementById("best-discount").value
       };
-       fetch(URL + "/" + car.id, {
+      const options = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(car),
-      })
+      };
+
+       fetch(URL + "/" + car.id, options)
         .then((res) => {
             clearInput();
             hideBox();
@@ -74,6 +90,7 @@ function editCar(evt){
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -85,7 +102,6 @@ function editCar(evt){
           console.log(error);
         });
       }
-
 
 function clearInput(){
     document.getElementById("brand").value = ""

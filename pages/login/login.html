@@ -14,16 +14,13 @@
           <div class="col-md-4">
             <h1>Login</h1>
           </div>
-          <div class="col-md-6" style="padding-top: 0px;margin-top:0px;">
-            <img class="img-fluid" style="width:100%" src="../../images/cars.PNG" alt="cars logo" class="carlogo">
-          </div>
         </div>
         <div class="row" style="margin-top: 2em;">
           <div class="col-md-2">
             <label for="username"><b>Username</b></label>
           </div>
           <div class="col-md-8">
-            <input type="text" placeholder="Enter Username" id="username" required>
+            <input type="text" placeholder="Enter Username" id="username">
           </div>
         </div>
         <div class="row">
@@ -36,8 +33,7 @@
         </div>
         <div class="row" style="margin-top:2em">
           <div class="col-md-3 d-flex align-items-center">
-            <button style="width:100%" class="btn btn-dark car-zero-margin"
-              onClick="alert('Implement when you are ready for security')">Login</button>
+            <button id="login-btn" style="width:100%" class="btn btn-dark car-zero-margin">Login</button>
           </div>
           <div class="col-md-4 d-flex align-items-center">
             <span class="car-zero-margin">Not yet a member
@@ -45,9 +41,8 @@
           </div>
           <div class="col-md-4 d-flex align-items-center">
             <button class="btn btn-link car-zero-margin"
-              onClick="alert('This is not, and will not be, implemented')">Forgot
-              password
-            </button>
+              onClick="alert('This is not, and will not be, implemented')">Forgotpassword</button>
           </div>
+          <p id="error" style="color: red"></p>
         </div>
       </div>
